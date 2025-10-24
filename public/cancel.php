@@ -1,0 +1,1 @@
+<!doctype html><html><body><h2>Operação cancelada</h2><a href='cart.php'>Voltar</a></body></html>

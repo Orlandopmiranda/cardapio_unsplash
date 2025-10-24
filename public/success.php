@@ -1,0 +1,1 @@
+<!doctype html><html><body><h2>Pagamento / Pedido registrado com sucesso!</h2><a href='index.php'>Voltar ao cardápio</a></body></html>
