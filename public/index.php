@@ -1,49 +1,39 @@
 <?php
 session_start();
 require_once __DIR__ . '/../src/db.php';
-
-
-
 $pdo = getPDO();
 
 // Buscar categorias
-$stmt = $pdo->query("SELECT DISTINCT c.id, c.name 
-                     FROM categories c
-                     JOIN dishes d ON d.category_id = c.id
-                     ORDER BY c.name ASC");
-$categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-
-
+$categoriesStmt = $pdo->query("SELECT * FROM categories ORDER BY name");
+$categories = $categoriesStmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Buscar pratos
-// Se categoria selecionada
-$category_id = $_GET['category'] ?? 0;
-if ($category_id) {
-    $stmt = $pdo->prepare("SELECT * FROM dishes WHERE category_id = ?");
-    $stmt->execute([$category_id]);
-} else {
-    $stmt = $pdo->query("SELECT * FROM dishes");
-}
-$dishes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$dishesStmt = $pdo->query("SELECT d.*, c.name AS category_name FROM dishes d LEFT JOIN categories c ON d.category_id=c.id");
+$dishes = $dishesStmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-
-<!DOCTYPE html>
-<html lang="pt-br">
+<!doctype html>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurante - Cardápio</title>
+    <meta charset="utf-8">
+    <title>Restaurante Gourmet</title>
     <link rel="stylesheet" href="assets/css/styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <header>
-    <div class="logo">
-        <h1>Restaurante Gourmet</h1>
-    </div>
+    <h1>🍽️ Restaurante Gourmet</h1>
     <nav>
-        <a href="cart.php">Carrinho (<?php echo isset($_SESSION['cart']) ? count($_SESSION['cart']) : 0; ?>)</a>
+        <a href="cart.php">Carrinho (<?php
+            if (!empty($_SESSION['user_id'])) {
+                $stmt = $pdo->prepare("SELECT SUM(quantity) AS total FROM cart_items WHERE user_id = ?");
+                $stmt->execute([$_SESSION['user_id']]);
+                $total = $stmt->fetchColumn();
+                echo $total ?: 0;
+            } else {
+                $total = 0;
+                foreach ($_SESSION['cart'] ?? [] as $c) $total += $c['qty'];
+                echo $total;
+            }
+        ?>)</a>
         <?php if(!empty($_SESSION['user_logged'])): ?>
             <span>Olá, <?php echo htmlspecialchars($_SESSION['user_name']); ?></span>
             <a href="logout.php">Sair</a>
@@ -55,39 +45,52 @@ $dishes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </header>
 
 <main>
-    <section class="hero">
-        <h2>Nosso Cardápio</h2>
-        <p>Escolha os melhores pratos da nossa cozinha</p>
-        <div id="categories">
-    <a href="index.php"><button>Todas</button></a>
-    <?php foreach ($categories as $cat): ?>
-        <a href="index.php?category=<?php echo $cat['id']; ?>">
-            <button><?php echo htmlspecialchars($cat['name']); ?></button>
-        </a>
-    <?php endforeach; ?>
-</div>
+    <h2>Cardápio</h2>
 
-    </section>
+    <div id="categories">
+        <button data-category="all">Todos</button>
+        <?php foreach($categories as $cat): ?>
+            <button data-category="<?php echo $cat['id']; ?>"><?php echo htmlspecialchars($cat['name']); ?></button>
+        <?php endforeach; ?>
+    </div>
 
-    <section id="menu" class="menu-grid">
+    <div id="menu">
         <?php foreach($dishes as $dish): ?>
-            <div class="dish-card">
-                <!--<img src="<?php echo htmlspecialchars($dish['image']); ?>" alt="<?php echo htmlspecialchars($dish['name']); ?>">-->
-                <div class="dish-info">
+            <div class="dish" data-category="<?php echo $dish['category_id']; ?>">
+                <!-- Usando image_url do banco -->
+                <img src="<?php echo $dish['image_url']; ?>" width="100">
+                <div class="dish-body">
                     <h3><?php echo htmlspecialchars($dish['name']); ?></h3>
-                    <span class="price">R$ <?php echo number_format($dish['price'], 2, ',', '.'); ?></span>
+                    <p><?php echo htmlspecialchars($dish['description']); ?></p>
+                    <div class="price">R$ <?php echo number_format($dish['price'], 2, ',', '.'); ?></div>
                     <form method="post" action="cart.php">
                         <input type="hidden" name="id" value="<?php echo $dish['id']; ?>">
                         <input type="hidden" name="name" value="<?php echo htmlspecialchars($dish['name']); ?>">
                         <input type="hidden" name="price" value="<?php echo $dish['price']; ?>">
-                        <!--<input type="hidden" name="image" value="<?php echo htmlspecialchars($dish['image']); ?>">-->
+                        <input type="hidden" name="image" value="<?php echo $dish['image_url']; ?>">
                         <button type="submit" name="add_to_cart" class="btn">Adicionar ao carrinho</button>
                     </form>
                 </div>
             </div>
         <?php endforeach; ?>
-    </section>
+    </div>
+
 </main>
+
+<script>
+// Filtrar por categoria
+const buttons = document.querySelectorAll('#categories button');
+const dishes = document.querySelectorAll('.dish');
+buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const cat = btn.dataset.category;
+        dishes.forEach(d => {
+            if(cat === 'all' || d.dataset.category === cat) d.style.display = 'block';
+            else d.style.display = 'none';
+        });
+    });
+});
+</script>
+
 </body>
 </html>
-

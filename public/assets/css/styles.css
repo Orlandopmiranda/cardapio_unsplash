@@ -1,91 +1,129 @@
-/* Reset e fonte */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Roboto', sans-serif; background: #f7f7f7; color: #333; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
 
-/* Header */
+body {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 10px;
+  background: #f9f9f9;
+  color: #333;
+}
+
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 40px;
-    background-color: #fff;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
 }
 
-header .logo h1 { color: #e74c3c; }
-header nav a, header nav span {
-    margin-left: 20px;
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
+header h1 {
+  color: #e63946; /* vermelho vibrante */
+  font-size: 2rem;
 }
 
-header nav a:hover { color: #e74c3c; }
-
-/* Hero */
-.hero {
-    text-align: center;
-    padding: 40px 0;
-    background: url('../img/hero.jpg') center/cover no-repeat;
-    color: #fff;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+nav a {
+  margin-left: 10px;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  transition: color 0.3s;
 }
 
-.hero h2 { font-size: 36px; margin-bottom: 10px; }
-.hero p { font-size: 18px; }
-
-/* Menu Grid */
-.menu-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 20px;
-    padding: 30px 40px;
+nav a:hover {
+  color: #e63946;
 }
 
-/* Dish Card */
-.dish-card {
-    background: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
+#menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
 }
 
-.dish-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+.dish {
+  border: 1px solid #eee;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.dish-card img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
+.dish:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
 }
 
-.dish-info {
-    padding: 15px;
-    text-align: center;
+.dish img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
 }
 
-.dish-info h3 { font-size: 20px; margin-bottom: 8px; }
-.dish-info .price { font-weight: bold; color: #e74c3c; margin-bottom: 12px; display: block; }
+.dish-body {
+  padding: 10px;
+}
+
+.dish h3 {
+  margin-bottom: 6px;
+  font-size: 18px;
+}
+
+.dish p {
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.dish .price {
+  font-weight: bold;
+  color: #e63946;
+  margin-bottom: 8px;
+}
 
 .btn {
-    padding: 10px 15px;
-    background-color: #e74c3c;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    width: 100%;
-    font-weight: bold;
-    transition: background 0.3s;
+  display: block;
+  width: 100%;
+  padding: 8px 0;
+  background: #e63946;
+  color: #fff;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
-.btn:hover { background-color: #c0392b; }
+.btn:hover {
+  background: #d62839;
+}
 
-/* Responsivo */
-@media (max-width: 768px) {
-    header { flex-direction: column; align-items: flex-start; gap: 10px; padding: 20px; }
-    .menu-grid { padding: 20px; gap: 15px; }
+/* Tabela do carrinho */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  background: #e63946;
+  color: #fff;
+}
+
+td img {
+  border-radius: 6px;
+}
+
+h3 {
+  margin-top: 15px;
 }

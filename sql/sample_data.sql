@@ -4,7 +4,7 @@ INSERT INTO categories (name) VALUES
 ('Massas'), ('Carnes'), ('Saladas'), ('Sobremesas'), ('Bebidas');
 
 INSERT INTO dishes (category_id, name, description, price, image_url) VALUES
-(1, 'Spaghetti à Bolonhesa', 'Espaguete com molho bolonhesa e parmesão ralado.', 34.90, 'https://source.unsplash.com/400x300/?spaghetti,pasta'),
+(1, 'Spaghetti à Bolonhesa', 'Espaguete com molho bolonhesa e parmesão ralado.', 34.90, 'https://images.unsplash.com/photo-1608897013039-887f21d8c804,pasta',
 (1, 'Fettuccine Alfredo', 'Fettuccine cremoso ao molho Alfredo com queijo.', 36.50, 'https://source.unsplash.com/400x300/?fettuccine,pasta'),
 (2, 'Picanha Grelhada', 'Picanha fatiada acompanhada de batatas rústicas.', 59.90, 'https://source.unsplash.com/400x300/?steak,meat'),
 (2, 'Frango Assado', 'Frango temperado e assado lentamente.', 29.90, 'https://source.unsplash.com/400x300/?roast-chicken'),
