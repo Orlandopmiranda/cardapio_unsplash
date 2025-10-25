@@ -1,14 +1,91 @@
-*{box-sizing:border-box}
-body{ font-family:Arial, sans-serif; max-width:1200px; margin:20px auto; padding:10px; }
-header{ display:flex; justify-content:space-between; align-items:center; gap:12px; }
-nav a{ margin-left:8px; text-decoration:none; color:#333; }
-#categories{ margin-top:12px; }
-#categories button{ margin:4px; padding:6px 10px; border-radius:6px; border:1px solid #ccc; cursor:pointer; }
-#menu{ display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap:18px; margin-top:12px; }
-.dish{ border:1px solid #eee; border-radius:10px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.05); background:#fff; }
-.dish img{ width:100%; height:180px; object-fit:cover; display:block; }
-.dish-body{ padding:12px; }
-.dish h3{ margin:0 0 6px 0; font-size:18px; }
-.dish p{ margin:0 0 8px 0; color:#555; }
-.dish .price{ font-weight:bold; margin-bottom:8px; }
-.btn{ padding:8px 12px; background:#28a745; color:#fff; border-radius:8px; border:none; cursor:pointer; }
+/* Reset e fonte */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Roboto', sans-serif; background: #f7f7f7; color: #333; }
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+header .logo h1 { color: #e74c3c; }
+header nav a, header nav span {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+header nav a:hover { color: #e74c3c; }
+
+/* Hero */
+.hero {
+    text-align: center;
+    padding: 40px 0;
+    background: url('../img/hero.jpg') center/cover no-repeat;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+}
+
+.hero h2 { font-size: 36px; margin-bottom: 10px; }
+.hero p { font-size: 18px; }
+
+/* Menu Grid */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    padding: 30px 40px;
+}
+
+/* Dish Card */
+.dish-card {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dish-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.dish-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.dish-info {
+    padding: 15px;
+    text-align: center;
+}
+
+.dish-info h3 { font-size: 20px; margin-bottom: 8px; }
+.dish-info .price { font-weight: bold; color: #e74c3c; margin-bottom: 12px; display: block; }
+
+.btn {
+    padding: 10px 15px;
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.btn:hover { background-color: #c0392b; }
+
+/* Responsivo */
+@media (max-width: 768px) {
+    header { flex-direction: column; align-items: flex-start; gap: 10px; padding: 20px; }
+    .menu-grid { padding: 20px; gap: 15px; }
+}
