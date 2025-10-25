@@ -1,73 +1,45 @@
 <?php
 session_start();
 require_once __DIR__ . '/../src/db.php';
-$pdo = getPDO();
 
-$error = '';
+if(isset($_POST['username'])){
+    $u = trim($_POST['username']);
+    $p = $_POST['password'];
 
-if (isset($_POST['username'], $_POST['password'])) {
-    $username = trim($_POST['username']);
-    $password = $_POST['password'];
+    $pdo = getPDO();
+    $stmt = $pdo->prepare('SELECT id, username, password FROM users WHERE username = ? LIMIT 1');
+    $stmt->execute([$u]);
+    $user = $stmt->fetch();
 
-    // Buscar usuário no banco
-    $stmt = $pdo->prepare("SELECT id, username, password FROM users WHERE username = ? LIMIT 1");
-    $stmt->execute([$username]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($user && password_verify($password, $user['password'])) {
-        // Usuário autenticado
+    if($user && password_verify($p, $user['password'])){
         $_SESSION['user_logged'] = true;
         $_SESSION['user_name'] = $user['username'];
-        $_SESSION['user_id'] = $user['id'];
-
-        // ===========================
-        // Migrar carrinho da sessão
-        // ===========================
-        if (!empty($_SESSION['cart'])) {
-            foreach ($_SESSION['cart'] as $item) {
-                $stmt = $pdo->prepare("
-                    INSERT INTO cart_items (user_id, dish_id, quantity)
-                    VALUES (?, ?, ?)
-                    ON DUPLICATE KEY UPDATE quantity = quantity + ?
-                ");
-                $stmt->execute([
-                    $user['id'],
-                    $item['id'],
-                    $item['qty'],
-                    $item['qty']
-                ]);
-            }
-            // Limpar carrinho da sessão após migrar
-            unset($_SESSION['cart']);
-        }
-
-        header('Location: index.php');
+        header('Location: index.php'); 
         exit;
     } else {
         $error = 'Usuário ou senha incorretos.';
     }
 }
 ?>
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
-    <meta charset="utf-8">
-    <title>Login</title>
-    <link rel="stylesheet" href="assets/css/styles.css">
+<meta charset="UTF-8">
+<title>Login</title>
+<link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
+<div class="login-box">
     <h2>Login</h2>
-
-    <?php if ($error): ?>
-        <p style="color:red;"><?php echo htmlspecialchars($error); ?></p>
+    <?php if(!empty($error)): ?>
+        <div class="message"><?php echo $error; ?></div>
     <?php endif; ?>
-
     <form method="post">
-        <label>Usuário: <input type="text" name="username" required></label><br>
-        <label>Senha: <input type="password" name="password" required></label><br>
-        <button type="submit">Entrar</button>
+        <input type="text" name="username" placeholder="Usuário" class="input-field" required>
+        <input type="password" name="password" placeholder="Senha" class="input-field" required>
+        <button type="submit" class="btn">Entrar</button>
     </form>
-
-    <p>Não tem conta? <a href="register.php">Cadastre-se</a></p>
+    <a href="register.php" class="link">Não tem conta? Cadastre-se</a>
+</div>
 </body>
 </html>

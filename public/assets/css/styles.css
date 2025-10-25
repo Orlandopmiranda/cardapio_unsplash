@@ -127,3 +127,85 @@ td img {
 h3 {
   margin-top: 15px;
 }
+
+/* Container centralizado */
+.login-box {
+    background: #fff;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    width: 350px;
+    margin: 80px auto;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.login-box:hover {
+    transform: translateY(-5px);
+}
+
+/* Título do formulário */
+.login-box h2 {
+    margin-bottom: 25px;
+    color: #e63946;
+}
+
+/* Inputs estilizados */
+.input-field {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 12px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.input-field:focus {
+    border-color: #e63946;
+    box-shadow: 0 0 6px rgba(230,57,70,0.2);
+    outline: none;
+}
+
+/* Botão estilizado */
+.btn {
+    display: block;
+    width: 100%;
+    padding: 12px 0;
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.3s;
+}
+
+.btn:hover {
+    background: #d62839;
+    box-shadow: 0 4px 15px rgba(230,57,70,0.3);
+}
+
+/* Mensagem de erro */
+.message {
+    margin-bottom: 15px;
+    color: red;
+    font-weight: bold;
+}
+
+/* Links de cadastro/login */
+.link {
+    display: block;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #e63946;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.link:hover {
+    color: #d62839;
+    text-decoration: underline;
+}
+
