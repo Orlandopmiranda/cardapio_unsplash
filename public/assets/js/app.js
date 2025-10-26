@@ -167,6 +167,7 @@ function alignButtons() {
     });
 }
 
+
 // Filtrar por categoria
 const buttons = document.querySelectorAll('#categories button');
 
@@ -193,4 +194,8 @@ buttons.forEach(btn => {
 // Alinha quando a página carrega
 window.addEventListener('load', alignButtons);
 window.addEventListener('resize', alignButtons); // também ajusta se a tela mudar
+<<<<<<< HEAD
 >>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)
+=======
+
+>>>>>>> dea07ee (foi feito o alinhamento dos fotos dos cardapios e a parte de checkout)

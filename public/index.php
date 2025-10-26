@@ -33,20 +33,29 @@ $dishes = $dishesStmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
 <header>
     <h1>🍽️ Restaurante Gourmet</h1>
-    <nav>
-        <a href="cart.php">Carrinho (<?php
-            if (!empty($_SESSION['user_id'])) {
-                $stmt = $pdo->prepare("SELECT SUM(quantity) AS total FROM cart_items WHERE user_id = ?");
-                $stmt->execute([$_SESSION['user_id']]);
-                $total = $stmt->fetchColumn();
-                echo $total ?: 0;
-            } else {
-                $total = 0;
-                foreach ($_SESSION['cart'] ?? [] as $c) $total += $c['qty'];
-                echo $total;
-            }
-        ?>)</a>
+    <nav style="display:flex; align-items:center; gap:15px;">
         <?php if(!empty($_SESSION['user_logged'])): ?>
+            <!-- Carrinho com contador -->
+            <a href="cart.php" style="position:relative; display:inline-block; font-size:24px;">
+                🛒
+                <span id="cart-count" style="
+                    position:absolute;
+                    top:-8px;
+                    right:-12px;
+                    background:red;
+                    color:white;
+                    font-size:12px;
+                    padding:2px 6px;
+                    border-radius:50%;
+                ">
+                    <?php
+                        $total = 0;
+                        foreach ($_SESSION['cart'] ?? [] as $c) $total += $c['qty'];
+                        echo $total;
+                    ?>
+                </span>
+            </a>
+
             <span>Olá, <?php echo htmlspecialchars($_SESSION['user_name']); ?></span>
             <a href="logout.php">Sair</a>
         <?php else: ?>
@@ -55,6 +64,28 @@ $dishes = $dishesStmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endif; ?>
     </nav>
 </header>
+
+<script>
+// Atualiza o contador do carrinho dinamicamente
+function updateCartCount() {
+    const el = document.getElementById('cart-count');
+    if (!el) return;
+    let total = 0;
+
+    // Obter carrinho do sessionStorage ou localStorage se quiser dinamicamente
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    cart.forEach(item => { total += item.qty || 0; });
+
+    el.textContent = total;
+}
+
+// Exemplo: chamar updateCartCount() sempre que adicionar ao carrinho
+// addToCart() { ...; updateCartCount(); }
+
+document.addEventListener('DOMContentLoaded', updateCartCount);
+</script>
+
+
 
 <main>
     <h2>Cardápio</h2>
