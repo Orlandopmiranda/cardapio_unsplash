@@ -1,12 +1,26 @@
 <?php
 session_start();
+<<<<<<< HEAD
 require_once __DIR__ . '/../src/db.php';
+=======
+require_once __DIR__ . '/../private/database.php';
+
+try {
+    $db = new Database();
+    $pdo = $db->getConnection();
+} catch (Exception $e) {
+    die('<h3 style="color:red;">Erro de conexão segura com o banco de dados.</h3>');
+}
+>>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)
 
 if(isset($_POST['username'])){
     $u = trim($_POST['username']);
     $p = $_POST['password'];
 
+<<<<<<< HEAD
     $pdo = getPDO();
+=======
+>>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)
     $stmt = $pdo->prepare('SELECT id, username, password FROM users WHERE username = ? LIMIT 1');
     $stmt->execute([$u]);
     $user = $stmt->fetch();
@@ -14,6 +28,10 @@ if(isset($_POST['username'])){
     if($user && password_verify($p, $user['password'])){
         $_SESSION['user_logged'] = true;
         $_SESSION['user_name'] = $user['username'];
+<<<<<<< HEAD
+=======
+        $_SESSION['user_id'] = $user['id']; // importante para carrinho vinculado
+>>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)
         header('Location: index.php'); 
         exit;
     } else {
@@ -40,6 +58,10 @@ if(isset($_POST['username'])){
         <button type="submit" class="btn">Entrar</button>
     </form>
     <a href="register.php" class="link">Não tem conta? Cadastre-se</a>
+<<<<<<< HEAD
+=======
+    <a href="index.php" class="link">← Voltar para o Cardápio</a>
+>>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)
 </div>
 </body>
 </html>

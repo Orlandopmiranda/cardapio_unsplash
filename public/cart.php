@@ -1,7 +1,18 @@
 <?php
 session_start();
+<<<<<<< HEAD
 require_once __DIR__ . '/../src/db.php';
 $pdo = getPDO();
+=======
+require_once __DIR__ . '/../private/database.php';
+
+try {
+    $db = new Database();
+    $pdo = $db->getConnection();
+} catch (Exception $e) {
+    die('<h3 style="color:red;">Erro de conexão segura com o banco de dados.</h3>');
+}
+>>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)
 
 // Inicializar carrinho se não existir
 if (!isset($_SESSION['cart'])) {
@@ -174,15 +185,29 @@ foreach ($cart as $item) {
                     <td>R$ <?php echo number_format($item['price'], 2, ',', '.'); ?></td>
                     <td><?php echo $item['quantity'] ?? $item['qty']; ?></td>
                     <td>R$ <?php echo number_format($item['price'] * ($item['quantity'] ?? $item['qty']), 2, ',', '.'); ?></td>
+<<<<<<< HEAD
                     <td><a href="cart.php?remove=<?php echo $item['id']; ?>">Remover</a></td>
+=======
+                    <td>
+                        <a href="cart.php?remove=<?php echo $item['id']; ?>" class="remove-btn" title="Remover">
+                            🗑️
+                        </a>
+                    </td>
+
+>>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)
                 </tr>
             <?php endforeach; ?>
         </table>
 
         <h3>Total Geral: R$ <?php echo number_format($total, 2, ',', '.'); ?></h3>
 
+<<<<<<< HEAD
         <form action="cart.php" method="post">
             <button type="submit" name="finalizar" class="btn">Finalizar Pedido</button>
+=======
+        <form action="checkout.php" method="get">
+        <button type="submit" class="btn">Ir para Pagamento</button>
+>>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)
         </form>
     <?php endif; ?>
 
@@ -190,3 +215,8 @@ foreach ($cart as $item) {
     <a href="index.php">Voltar ao cardápio</a>
 </body>
 </html>
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)

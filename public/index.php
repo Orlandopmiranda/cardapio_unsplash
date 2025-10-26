@@ -1,7 +1,19 @@
 <?php
 session_start();
+<<<<<<< HEAD
 require_once __DIR__ . '/../src/db.php';
 $pdo = getPDO();
+=======
+require_once __DIR__ . '/../private/database.php';
+
+// Conexão segura
+try {
+    $db = new Database();
+    $pdo = $db->getConnection();
+} catch (Exception $e) {
+    die('<h3 style="color:red;">Erro de conexão segura com o banco de dados.</h3>');
+}
+>>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)
 
 // Buscar categorias
 $categoriesStmt = $pdo->query("SELECT * FROM categories ORDER BY name");
@@ -48,7 +60,11 @@ $dishes = $dishesStmt->fetchAll(PDO::FETCH_ASSOC);
     <h2>Cardápio</h2>
 
     <div id="categories">
+<<<<<<< HEAD
         <button data-category="all">Todos</button>
+=======
+        <button onclick="window.location.reload()">Todos</button>
+>>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)
         <?php foreach($categories as $cat): ?>
             <button data-category="<?php echo $cat['id']; ?>"><?php echo htmlspecialchars($cat['name']); ?></button>
         <?php endforeach; ?>
@@ -57,8 +73,12 @@ $dishes = $dishesStmt->fetchAll(PDO::FETCH_ASSOC);
     <div id="menu">
         <?php foreach($dishes as $dish): ?>
             <div class="dish" data-category="<?php echo $dish['category_id']; ?>">
+<<<<<<< HEAD
                 <!-- Usando image_url do banco -->
                 <img src="<?php echo $dish['image_url']; ?>" width="100">
+=======
+                <img src="<?php echo htmlspecialchars($dish['image_url']); ?>" width="100">
+>>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)
                 <div class="dish-body">
                     <h3><?php echo htmlspecialchars($dish['name']); ?></h3>
                     <p><?php echo htmlspecialchars($dish['description']); ?></p>
@@ -67,7 +87,11 @@ $dishes = $dishesStmt->fetchAll(PDO::FETCH_ASSOC);
                         <input type="hidden" name="id" value="<?php echo $dish['id']; ?>">
                         <input type="hidden" name="name" value="<?php echo htmlspecialchars($dish['name']); ?>">
                         <input type="hidden" name="price" value="<?php echo $dish['price']; ?>">
+<<<<<<< HEAD
                         <input type="hidden" name="image" value="<?php echo $dish['image_url']; ?>">
+=======
+                        <input type="hidden" name="image" value="<?php echo htmlspecialchars($dish['image_url']); ?>">
+>>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)
                         <button type="submit" name="add_to_cart" class="btn">Adicionar ao carrinho</button>
                     </form>
                 </div>

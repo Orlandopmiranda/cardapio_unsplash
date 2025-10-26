@@ -1,3 +1,94 @@
+<<<<<<< HEAD
+=======
+/* Container com grid flexível */
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+/* Card: flex column, altura uniforme */
+.dish {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+    /* altura mínima para todos os cards */
+    min-height: 400px;
+}
+
+/* Conteúdo do card */
+.dish-body {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* ocupa espaço disponível para empurrar botão */
+}
+
+/* Descrição ocupa espaço extra */
+.dish-body p {
+    flex-grow: 1;
+}
+
+/* Botão: sempre no final */
+.btn {
+    margin-top: auto; /* força botão para o final do card */
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 15px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn:hover {
+    background-color: #c0392b;
+}
+
+/* cards */
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* garante que o botão fique no mesmo lugar */
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 10px;
+    background: #fff;
+}
+
+/* corpo do card */
+.card-body {
+    flex: 1; /* expande para ocupar o máximo de espaço disponível */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* força botão na mesma linha inferior */
+}
+
+/* botão */
+.card button {
+    margin-top: 10px;
+    align-self: stretch; /* opcional: botão ocupa toda a largura */
+}
+
+.remove-btn {
+    font-size: 20px;
+    color: #e63946;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.remove-btn:hover {
+    color: #d62839;
+}
+
+
+>>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)
 * {
   box-sizing: border-box;
   margin: 0;
@@ -209,3 +300,7 @@ h3 {
     text-decoration: underline;
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)

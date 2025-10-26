@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 // app.js - improved: cart handling, totals, images fallback, categories and menu rendering
 async function loadCategories(){
@@ -137,3 +138,59 @@ document.addEventListener('DOMContentLoaded', ()=>{
   const form = document.getElementById('order-form');
   if(form) form.addEventListener('submit', e=>{ e.preventDefault(); handleOrder(form); });
 });
+=======
+// Função para alinhar os botões ao final do card
+function alignButtons() {
+    const cards = document.querySelectorAll('.dish');
+    let maxHeight = 0;
+
+    // Primeiro, resetamos para calcular corretamente
+    cards.forEach(c => {
+        const body = c.querySelector('.dish-body');
+        body.style.height = 'auto';
+    });
+
+    // Encontrar a maior altura entre os cards visíveis
+    cards.forEach(c => {
+        if (c.style.display !== 'none') {
+            const body = c.querySelector('.dish-body');
+            if(body.offsetHeight > maxHeight) maxHeight = body.offsetHeight;
+        }
+    });
+
+    // Aplicar altura máxima a todos os cards visíveis
+    cards.forEach(c => {
+        if (c.style.display !== 'none') {
+            const body = c.querySelector('.dish-body');
+            body.style.height = maxHeight + 'px';
+        }
+    });
+}
+
+// Filtrar por categoria
+const buttons = document.querySelectorAll('#categories button');
+
+buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        const cat = btn.dataset.category;
+        const cards = document.querySelectorAll('.dish');
+
+        if(cat === 'all') {
+            // Mostrar todos os cards
+            cards.forEach(c => c.style.display = 'flex');
+        } else {
+            // Mostrar apenas a categoria selecionada
+            cards.forEach(c => {
+                c.style.display = (c.dataset.category === cat) ? 'flex' : 'none';
+            });
+        }
+
+        // Recalcular alturas para alinhar botões
+        alignButtons();
+    });
+});
+
+// Alinha quando a página carrega
+window.addEventListener('load', alignButtons);
+window.addEventListener('resize', alignButtons); // também ajusta se a tela mudar
+>>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)
