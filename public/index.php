@@ -31,39 +31,37 @@ $dishes = $dishesStmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-<header>
-    <h1>🍽️ Restaurante Gourmet</h1>
-    <nav style="display:flex; align-items:center; gap:15px;">
-        <?php if(!empty($_SESSION['user_logged'])): ?>
-            <!-- Carrinho com contador -->
-            <a href="cart.php" style="position:relative; display:inline-block; font-size:24px;">
-                🛒
-                <span id="cart-count" style="
-                    position:absolute;
-                    top:-8px;
-                    right:-12px;
-                    background:red;
-                    color:white;
-                    font-size:12px;
-                    padding:2px 6px;
-                    border-radius:50%;
-                ">
-                    <?php
-                        $total = 0;
-                        foreach ($_SESSION['cart'] ?? [] as $c) $total += $c['qty'];
-                        echo $total;
-                    ?>
-                </span>
-            </a>
+<?php
 
-            <span>Olá, <?php echo htmlspecialchars($_SESSION['user_name']); ?></span>
-            <a href="logout.php">Sair</a>
-        <?php else: ?>
-            <a href="login.php">Entrar</a>
-            <a href="register.php">Cadastrar</a>
-        <?php endif; ?>
-    </nav>
+
+
+$db = new Database();
+$pdo = $db->getConnection();
+
+// Contador do carrinho (só se logado)
+$cartCount = 0;
+if (isset($_SESSION['user_id'])) {
+    $stmt = $pdo->prepare("SELECT SUM(quantity) AS total FROM cart_items WHERE user_id = ?");
+    $stmt->execute([$_SESSION['user_id']]);
+    $cartCount = (int) $stmt->fetchColumn();
+}
+?>
+<header>
+  <h1>🍝 Restaurante Gourmet</h1>
+  <nav>
+    <a href="index.php">Início</a>
+    <?php if(isset($_SESSION['user_id'])): ?>
+      <a href="profile.php">Perfil</a>
+      <a href="checkout.php" class="cart-icon">
+        <span class="cart-count"><?= $cartCount ?></span>
+      </a>
+      <a href="logout.php" style="color:#e63946;">Sair</a>
+    <?php else: ?>
+      <a href="login.php" class="btn">Entrar</a>
+    <?php endif; ?>
+  </nav>
 </header>
+
 
 <script>
 // Atualiza o contador do carrinho dinamicamente

@@ -1,9 +1,9 @@
 <?php
 session_start();
-<<<<<<< HEAD
+
 require_once __DIR__ . '/../src/db.php';
 $pdo = getPDO();
-=======
+
 require_once __DIR__ . '/../private/database.php';
 
 try {
@@ -57,106 +57,52 @@ if (isset($_POST['add_to_cart'])) {
     }
 
     header('Location: cart.php');
+=======
+require_once __DIR__ . '/../private/Database.php';
+
+if (empty($_SESSION['user_id'])) {
+    header('Location: login.php');
+>>>>>>> ecc5550 (foi atualizado a parte de pagamento)
     exit;
 }
 
-// ============================
+$db = new Database();
+$pdo = $db->getConnection();
+
 // Remover item do carrinho
-// ============================
-if (isset($_GET['remove'])) {
-    $dishId = $_GET['remove'];
-    if (!empty($_SESSION['user_id'])) {
-        $stmt = $pdo->prepare("DELETE FROM cart_items WHERE user_id = ? AND dish_id = ?");
-        $stmt->execute([$_SESSION['user_id'], $dishId]);
-    } else {
-        $_SESSION['cart'] = array_filter($_SESSION['cart'], fn($i) => $i['id'] != $dishId);
-    }
+if (isset($_GET['remove_id'])) {
+    $stmt = $pdo->prepare("DELETE FROM cart_items WHERE user_id=? AND dish_id=?");
+    $stmt->execute([$_SESSION['user_id'], $_GET['remove_id']]);
     header('Location: cart.php');
     exit;
 }
 
-// ============================
-// Finalizar pedido
-// ============================
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['finalizar'])) {
-    $cart = [];
+// Pegar itens do carrinho
+$stmt = $pdo->prepare("SELECT ci.quantity, d.id, d.name, d.price, d.image_url
+                       FROM cart_items ci 
+                       JOIN dishes d ON ci.dish_id = d.id 
+                       WHERE ci.user_id=?");
+$stmt->execute([$_SESSION['user_id']]);
+$cart = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    if (!empty($_SESSION['user_id'])) {
-        $stmt = $pdo->prepare("
-            SELECT ci.quantity, d.id, d.name, d.price, d.image_url AS image
-            FROM cart_items ci
-            JOIN dishes d ON d.id = ci.dish_id
-            WHERE ci.user_id = ?
-        ");
-        $stmt->execute([$_SESSION['user_id']]);
-        $cart = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        $stmt = $pdo->prepare("DELETE FROM cart_items WHERE user_id = ?");
-        $stmt->execute([$_SESSION['user_id']]);
-    } else {
-        $cart = $_SESSION['cart'] ?? [];
-        unset($_SESSION['cart']);
-    }
-
-    if (empty($cart)) {
-        $_SESSION['error'] = 'Carrinho vazio.';
-        header('Location: cart.php');
-        exit;
-    }
-
-    $total = 0;
-    foreach ($cart as $item) {
-        $total += $item['price'] * ($item['quantity'] ?? $item['qty']);
-    }
-
-    $_SESSION['success'] = 'Pedido finalizado com sucesso! Total: R$ ' . number_format($total, 2, ',', '.');
-    header('Location: thank_you.php');
-    exit;
-}
-
-// ============================
-// Preparar carrinho para exibir
-// ============================
-$cart = [];
-if (!empty($_SESSION['user_id'])) {
-    $stmt = $pdo->prepare("
-        SELECT ci.quantity, d.id, d.name, d.price, d.image_url AS image
-        FROM cart_items ci
-        JOIN dishes d ON d.id = ci.dish_id
-        WHERE ci.user_id = ?
-    ");
-    $stmt->execute([$_SESSION['user_id']]);
-    $cart = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} else {
-    $cart = $_SESSION['cart'] ?? [];
-}
-
+// Calcular total
 $total = 0;
-foreach ($cart as $item) {
-    $total += $item['price'] * ($item['quantity'] ?? $item['qty']);
-}
+foreach($cart as $item) $total += $item['price'] * $item['quantity'];
 ?>
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="pt-br">
 <head>
-    <meta charset="utf-8">
-    <title>Carrinho</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        h2 { color: darkred; }
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
-        th { background-color: darkred; color: white; }
-        td img { border-radius: 8px; }
-        .btn { padding: 8px 12px; background-color: darkred; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        .btn:hover { background-color: red; }
-        a { color: darkred; text-decoration: none; }
-        a:hover { text-decoration: underline; }
-    </style>
+<meta charset="UTF-8">
+<title>Carrinho</title>
+<link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-    <h2>Carrinho de Compras</h2>
+<header>
+    <h1>🛒 Seu Carrinho</h1>
+    <a href="index.php" class="btn">Voltar ao Cardápio</a>
+</header>
 
+<<<<<<< HEAD
     <?php if (!empty($_SESSION['error'])): ?>
         <p style="color:red;"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></p>
     <?php endif; ?>
@@ -220,3 +166,36 @@ foreach ($cart as $item) {
 
 
 >>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)
+=======
+<?php if(empty($cart)): ?>
+    <p>Seu carrinho está vazio.</p>
+<?php else: ?>
+<table>
+    <tr>
+        <th>Imagem</th>
+        <th>Produto</th>
+        <th>Quantidade</th>
+        <th>Preço</th>
+        <th>Subtotal</th>
+        <th>Remover</th>
+    </tr>
+    <?php foreach($cart as $item): ?>
+    <tr>
+        <td><img src="<?php echo $item['image_url'] ?: 'assets/img/no-image.png'; ?>" width="60"></td>
+        <td><?php echo htmlspecialchars($item['name']); ?></td>
+        <td><?php echo $item['quantity']; ?></td>
+        <td>R$ <?php echo number_format($item['price'],2,',','.'); ?></td>
+        <td>R$ <?php echo number_format($item['price']*$item['quantity'],2,',','.'); ?></td>
+        <td><a href="cart.php?remove_id=<?php echo $item['id']; ?>" class="remove-btn">🗑️</a></td>
+    </tr>
+    <?php endforeach; ?>
+    <tr>
+        <td colspan="4" style="text-align:right;font-weight:bold;">Total:</td>
+        <td colspan="2" style="font-weight:bold;">R$ <?php echo number_format($total,2,',','.'); ?></td>
+    </tr>
+</table>
+<a href="checkout.php" class="btn">Finalizar Pedido</a>
+<?php endif; ?>
+</body>
+</html>
+>>>>>>> ecc5550 (foi atualizado a parte de pagamento)
