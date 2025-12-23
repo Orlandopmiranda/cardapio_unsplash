@@ -1,9 +1,9 @@
 <?php
 session_start();
-<<<<<<< HEAD
+
 require_once __DIR__ . '/../src/db.php';
 $pdo = getPDO();
-=======
+
 require_once __DIR__ . '/../private/database.php';
 
 // Conexão segura
@@ -13,7 +13,6 @@ try {
 } catch (Exception $e) {
     die('<h3 style="color:red;">Erro de conexão segura com o banco de dados.</h3>');
 }
->>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)
 
 // Buscar categorias
 $categoriesStmt = $pdo->query("SELECT * FROM categories ORDER BY name");
@@ -32,11 +31,6 @@ $dishes = $dishesStmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 <?php
-
-
-
-$db = new Database();
-$pdo = $db->getConnection();
 
 // Contador do carrinho (só se logado)
 $cartCount = 0;
@@ -62,65 +56,35 @@ if (isset($_SESSION['user_id'])) {
   </nav>
 </header>
 
-
-<script>
-// Atualiza o contador do carrinho dinamicamente
-function updateCartCount() {
-    const el = document.getElementById('cart-count');
-    if (!el) return;
-    let total = 0;
-
-    // Obter carrinho do sessionStorage ou localStorage se quiser dinamicamente
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    cart.forEach(item => { total += item.qty || 0; });
-
-    el.textContent = total;
-}
-
-// Exemplo: chamar updateCartCount() sempre que adicionar ao carrinho
-// addToCart() { ...; updateCartCount(); }
-
-document.addEventListener('DOMContentLoaded', updateCartCount);
-</script>
-
-
-
 <main>
     <h2>Cardápio</h2>
 
     <div id="categories">
-<<<<<<< HEAD
         <button data-category="all">Todos</button>
-=======
-        <button onclick="window.location.reload()">Todos</button>
->>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)
+
         <?php foreach($categories as $cat): ?>
-            <button data-category="<?php echo $cat['id']; ?>"><?php echo htmlspecialchars($cat['name']); ?></button>
+            <button data-category="<?php echo $cat['id']; ?>">
+                <?php echo htmlspecialchars($cat['name']); ?>
+            </button>
         <?php endforeach; ?>
     </div>
 
     <div id="menu">
         <?php foreach($dishes as $dish): ?>
             <div class="dish" data-category="<?php echo $dish['category_id']; ?>">
-<<<<<<< HEAD
-                <!-- Usando image_url do banco -->
-                <img src="<?php echo $dish['image_url']; ?>" width="100">
-=======
+                
                 <img src="<?php echo htmlspecialchars($dish['image_url']); ?>" width="100">
->>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)
+
                 <div class="dish-body">
                     <h3><?php echo htmlspecialchars($dish['name']); ?></h3>
                     <p><?php echo htmlspecialchars($dish['description']); ?></p>
                     <div class="price">R$ <?php echo number_format($dish['price'], 2, ',', '.'); ?></div>
+
                     <form method="post" action="cart.php">
                         <input type="hidden" name="id" value="<?php echo $dish['id']; ?>">
                         <input type="hidden" name="name" value="<?php echo htmlspecialchars($dish['name']); ?>">
                         <input type="hidden" name="price" value="<?php echo $dish['price']; ?>">
-<<<<<<< HEAD
-                        <input type="hidden" name="image" value="<?php echo $dish['image_url']; ?>">
-=======
                         <input type="hidden" name="image" value="<?php echo htmlspecialchars($dish['image_url']); ?>">
->>>>>>> ee5f96e (Foi alinhado os botões do cards da tela inicial, foi incluido a parte de checkout)
                         <button type="submit" name="add_to_cart" class="btn">Adicionar ao carrinho</button>
                     </form>
                 </div>
@@ -134,12 +98,14 @@ document.addEventListener('DOMContentLoaded', updateCartCount);
 // Filtrar por categoria
 const buttons = document.querySelectorAll('#categories button');
 const dishes = document.querySelectorAll('.dish');
+
 buttons.forEach(btn => {
     btn.addEventListener('click', () => {
         const cat = btn.dataset.category;
         dishes.forEach(d => {
-            if(cat === 'all' || d.dataset.category === cat) d.style.display = 'block';
-            else d.style.display = 'none';
+            d.style.display = (cat === 'all' || d.dataset.category === cat)
+                ? 'block'
+                : 'none';
         });
     });
 });
